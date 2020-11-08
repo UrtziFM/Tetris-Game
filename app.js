@@ -67,5 +67,85 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
     
-    drawn()
+    // move the tetrominoes appear every one second (1000 msec)
+    timerId = setInterval(moveDown, 1000)
+
+    // assign functions to keyCodes
+
+    function control(e) {
+        if(e.keyCode === 37){
+            moveLeft()
+        } else if(e.keyCode === 38){
+            rotate()
+        } else if(e.keyCode === 39){
+            moveRight()
+        } else if(e.keyCode === 40){
+            moveDown()
+        }
+
+    }
+    document.addEventListener('keyup', control)
+
+    // move down function
+
+    function moveDown() {
+        undrawn()
+        currentPosition += width
+        drawn()
+        freeze()
+    }
+
+    // freeze function
+
+    function freeze() {
+        if(current.some(index => squares[currentPosition + index + width].classList.contains('taken'))){
+            current.forEach(index => squares[currentPosition + index].classList.add('taken'))
+        // start a new tetromino falling
+        random = Math.floor(Math.random() * theTetrominoes.length)
+        current = theTetrominoes[random][currentRotation]
+        currentPosition = 4
+        drawn()
+        }
+    }
+
+    // move the Tetraminoes left unless it is in the edge or there is a blockage
+
+    function moveLeft() {
+        undrawn()
+        const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+
+        if(!isAtLeftEdge) currentPosition -= 1
+
+        if(current.some(index => squares[currentPosition + index].classList.contains('taken'))){
+            currentPosition += 1
+        }
+        drawn()
+    }
+
+
+    // move the Tetraminoes right unless it is in the edge or there is a blockage
+
+    function moveRight() {
+        undrawn()
+        const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
+
+        if(!isAtRightEdge) currentPosition += 1
+
+        if(current.some(index => squares[currentPosition + index].classList.contains('taken'))){
+            currentPosition -= 1
+        }
+        drawn()
+    }
+
+    // rotate the tetramino
+
+    function rotate() {
+        undrawn()
+        currentRotation ++
+        if(currentRotation === current.length) {
+            currentRotation = 0 // if the current rotation gets 4, make it go back 0 again
+        }
+        current = theTetrominoes[random][currentRotation]
+        drawn()
+    }
 })
