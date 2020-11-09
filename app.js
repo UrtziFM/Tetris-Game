@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const grid = document.querySelector('.grid')
-    const ScoreDisplay = document.querySelector('#score')
-    const StartBtn = document.querySelector('#start-pause')
+    const scoreDisplay = document.querySelector('#score')
+    const startBtn = document.querySelector('#start-pause')
     let squares = Array.from(document.querySelectorAll('.grid div'))
     const width = 10
     let nextRandom = 0
+    let timerId
 
     console.log(squares)
 
@@ -179,4 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
             displaySquares[displayIndex + index].classList.add('tetromino')
         })
     }
+
+    // add functionality to start & pause botton
+    startBtn.addEventListener('click', ()=> {
+        if(timerId){
+            clearInterval(timerId)
+            timerId = null
+        }
+
+    })
 })
